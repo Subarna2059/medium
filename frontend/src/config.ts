@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://my-app.subernathapa6.workers.dev"

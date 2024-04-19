@@ -1,9 +1,9 @@
 import z from "zod";
 
 export const signupValidation = z.object({
-    email:z.string().email(),
-    password:z.string().min(4),
-    name:z.string(),
+    email:z.string(),
+    password:z.string(),
+    username:z.string(),
 })
 
 export type Signuptype = z.infer<typeof signupValidation>
