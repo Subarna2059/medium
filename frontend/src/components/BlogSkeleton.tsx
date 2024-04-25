@@ -1,4 +1,3 @@
-import { AppBar } from "./AppBar"
 
 export const BlogSkeleton = () => {
     return <>

@@ -9,7 +9,7 @@ export const Blog = () => {
     const {loading, blogs} = useSingleBlog({
         id:id||""
     });
-    if (loading) {
+    if (loading||!blogs) {
         return<div>
             <AppBar></AppBar>
             <BlogSkeleton></BlogSkeleton>
