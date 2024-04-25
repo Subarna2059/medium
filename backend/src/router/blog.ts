@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
 import { CreateBlogInputtype, createBlogInput } from "suberna-common-medium";
+import { tuple } from "zod";
 export const blogRouter = new Hono<{
     Bindings: {
         DATABASE_URL:string;
@@ -63,7 +64,8 @@ blogRouter.use("/*", async (c, next) => {
        if(insertPost) {
         c.status(200);
         return c.json({
-            msg:"Post posted"
+            msg:"Post posted",
+            data:insertPost,
         })
        }
     return c.json({
@@ -122,7 +124,18 @@ blogRouter.use("/*", async (c, next) => {
        datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
     try {
-       const data = await prisma.post.findMany();
+       const data = await prisma.post.findMany({
+        select: {
+            title:true,
+            content:true,
+            id:true,
+            author: {
+                select: {
+                    name:true,
+                }
+            }
+        }
+       });
        return c.json({
            posts:data
        })
@@ -139,6 +152,16 @@ blogRouter.use("/*", async (c, next) => {
         const data = await prisma.post.findFirst({
             where: {
                 id:Number(c.req.param('id')),
+            },
+            select: {
+                title:true,
+                content:true,
+                id:true,
+                author: {
+                    select: {
+                        name:true,
+                    }
+                }
             }
         })
         return c.json({
